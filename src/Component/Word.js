@@ -28,6 +28,7 @@ class Word extends Component{
     constructor(props){
         super(props);
         this.removeWord = this.removeWord.bind(this);
+        this.toggleWord = this.toggleWord.bind(this);
     }
     removeWord(){
         const {word , removeWord} = this.props;
@@ -35,8 +36,14 @@ class Word extends Component{
         axios.delete(URL)
         .then(() => removeWord(word._id));
     }
+    toggleWord(){
+        const { toggleWord , word} = this.props;
+        const URL = 'http://localhost:4000/word/' + word._id;
+        axios.put(URL , {isMemorized : !word.isMemorized})
+        .then(() => toggleWord(word._id)); 
+    }
     render(){
-        const { word , toggleWord} = this.props
+        const { word } = this.props
         const {en , vn , isMemorized} = word;
         return(
         <div className="word">
@@ -49,7 +56,7 @@ class Word extends Component{
             <div className="btn-container">
             <button
                 className={isMemorized ? "btn btn-success" : "btn btn-danger"}
-                onClick={() => toggleWord(word.id)}>
+                onClick={this.toggleWord}>
                 {isMemorized ? 'Forgot' : 'isMemorized'}
             </button>
             <button 
